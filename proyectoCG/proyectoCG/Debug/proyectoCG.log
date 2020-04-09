@@ -1,5 +1,4 @@
 ﻿  lego.cpp
-c:\users\star_\onedrive\escritorio\proyectog\proyectocg\proyectocg\lego.cpp(183): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\star_\onedrive\escritorio\proyectog\proyectocg\proyectocg\lego.cpp(327): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\star_\onedrive\escritorio\proyectog\proyectocg\proyectocg\lego.cpp(334): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-  proyectoCG.vcxproj -> C:\Users\star_\OneDrive\Escritorio\ProyectoG\proyectoCG\Debug\proyectoCG.exe
+c:\users\star_\onedrive\escritorio\proyectolego\proyectocg\proyectocg\proyectocg\lego.cpp(331): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\star_\onedrive\escritorio\proyectolego\proyectocg\proyectocg\proyectocg\lego.cpp(338): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+  proyectoCG.vcxproj -> C:\Users\star_\OneDrive\Escritorio\ProyectoLego\proyectoCG\proyectoCG\Debug\proyectoCG.exe

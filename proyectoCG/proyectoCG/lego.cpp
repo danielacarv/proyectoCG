@@ -35,7 +35,7 @@ GLFWmonitor *monitors;
 GLuint VBO, VAO, EBO;
 
 //Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 double	lastX = 0.0f,
 lastY = 0.0f;
 bool firstMouse = true;
@@ -121,10 +121,10 @@ void myData()
 {
 	float vertices[] = {
 		// positions          // texture coords
-		 1.0f,  1.0f, 0.0f,   1.0f, 1.0f, //0
+		 0.0f,  0.0f, 0.0f,   1.0f, 1.0f, //0
 		 1.0f,  0.0f, 0.0f,   1.0f, 0.0f, //1
-		 0.0f,  0.0f, 0.0f,   0.0f, 0.0f, //2
-		 0.0f,  1.0f, 0.0f,   0.0f, 1.0f, //3
+		 1.0f,  0.0f, -1.0f,   0.0f, 0.0f, //2
+		 0.0f,  0.0f, -1.0f,   0.0f, 1.0f, //3
 	};
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -184,11 +184,10 @@ void display(Shader shader)
 	glBindVertexArray(VAO);
 	//Colocar código aquí
 
-	for (i = 0; i < 5.8; i = i + 0.2) {
-		for (float j = 0; j < 5; j++) {
-			model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::translate(model, glm::vec3(j, i, 0.0f));
-			model = glm::scale(model, glm::vec3(1.0f, 0.2f, 1.0f));
+	for (i = 0; i < 10; i++) {
+		for (float j = 0; j < 10; j++) {
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(j, 0.0f, i));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 			shader.setMat4("model", model);
 			shader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
 			glBindTexture(GL_TEXTURE_2D, t_piezaL);
