@@ -35,7 +35,7 @@ GLFWmonitor *monitors;
 GLuint VBO, VAO, EBO;
 
 //Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 double	lastX = 0.0f,
 lastY = 0.0f;
 bool firstMouse = true;
@@ -61,7 +61,9 @@ float	movX = 0.0f,
 		i = 0;
 
 //Texture
-unsigned int t_piezaL;
+unsigned int t_piezaL,
+			 t_piezaGris,
+			 t_pBlanca;
 
 unsigned int generateTextures(const char* filename, bool alfa)
 {
@@ -114,17 +116,43 @@ void LoadTextures()
 {
 
 	t_piezaL = generateTextures("Textures/figura.jpg", 0);
-
+	t_piezaGris = generateTextures("Textures/piezaGris.jpg", 0);
+	t_pBlanca = generateTextures("Textures/pBlanca.jpg", 0);
 }
 
 void myData()
 {
 	float vertices[] = {
-		// positions          // texture coords
-		 0.0f,  0.0f, 0.0f,   1.0f, 1.0f, //0
-		 1.0f,  0.0f, 0.0f,   1.0f, 0.0f, //1
-		 1.0f,  0.0f, -1.0f,   0.0f, 0.0f, //2
-		 0.0f,  0.0f, -1.0f,   0.0f, 1.0f, //3
+
+		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Frontal
+		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
+		0.5f, 0.5f, 0.5f,		1.0f,1.0f,0.0f,	//V5
+		-0.5f, 0.5f, 0.5f,		0.0f,1.0f,0.0f,   //V4
+
+		0.5f, -0.5f, -0.5f,		0.0f,0.0f,0.0f,	//V2 - Trasera
+		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,   //V3
+		-0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V7
+		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
+
+		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Izq
+		-0.5f, 0.5f, -0.5f,		1.0f,0.0f,0.0f,	//V7
+		-0.5f, -0.5f, -0.5f,	1.0f,1.0f,0.0f,	//V3
+		-0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,	//V0
+
+		0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V5 - Der
+		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
+		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
+		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
+
+		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Sup
+		0.5f, 0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V5
+		0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V6
+		-0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,//V7
+
+		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Inf
+		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,	//V3
+		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
+		0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,
 	};
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -144,10 +172,10 @@ void myData()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 }
@@ -184,6 +212,38 @@ void display(Shader shader)
 	glBindVertexArray(VAO);
 	//Colocar código aquí
 
+	
+	for (i = 0; i < 5; i++) {
+		for (float j = 0; j < 20; j++) {
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(-i, 0.0f, j));
+			model = glm::scale(model, glm::vec3(1.0f, 0.1f, 1.0f));
+			shader.setMat4("model", model);
+			shader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, t_piezaGris);
+			glDrawArrays(GL_QUADS, 0, 24);
+		}
+	}
+
+	for (i = 0; i < 20; i++) {
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, i));
+		model = glm::scale(model, glm::vec3(1.0f, 0.1f, 1.0f));
+		shader.setMat4("model", model);
+		shader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, t_pBlanca);
+		glDrawArrays(GL_QUADS, 0, 24);
+	}
+
+	for (i = 1; i < 6; i++) {
+		for (float j = 0; j < 20; j++) {
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, 0.0f, j));
+			model = glm::scale(model, glm::vec3(1.0f, 0.1f, 1.0f));
+			shader.setMat4("model", model);
+			shader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, t_piezaGris);
+			glDrawArrays(GL_QUADS, 0, 24);
+		}
+	}
+	/*
 	for (i = 0; i < 10; i++) {
 		for (float j = 0; j < 10; j++) {
 			model = glm::translate(glm::mat4(1.0f), glm::vec3(j, 0.0f, i));
@@ -194,6 +254,8 @@ void display(Shader shader)
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
 	}
+	*/
+	glBindVertexArray(0);
 }
 
 int main()
