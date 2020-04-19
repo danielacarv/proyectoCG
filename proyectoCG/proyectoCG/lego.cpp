@@ -287,24 +287,48 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 
 	/* PIEZA GRIS */
 
-	model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,-1.5f,0.0f));
-	model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
-	shader.setMat4("model", model);
-	piso.Draw(shader);
+	for (float i = 0; i < 3; i++)
+	{
+		for (float j = 0; j < 15; j++)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f,j));
+			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			shader.setMat4("model", model);
+			piso.Draw(shader);
+		}
+	}
+
 
 	/* PIEZA BLANCA */
 
-	model = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, -1.5f, 0.0f));
-	model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
-	shader.setMat4("model", model);
-	PisoB.Draw(shader);
+	for (float i = 3; i < 6; i++)
+	{
+		for (float j = 0; j < 15; j++)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i,-1.5f,j));
+			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			shader.setMat4("model", model);
+			PisoB.Draw(shader);
+		}
+		
+	}
+	
 
 	/* SEGUNDA PIEZA GRIS */
 
-	model = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f,-1.5f,0.0f));
-	model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
-	shader.setMat4("model", model);
-	piso.Draw(shader);
+	for (float i = 6; i < 9; i++)
+	{
+		for (float j = 0; j < 15; j++)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i,-1.5f,j));
+			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			shader.setMat4("model", model);
+			piso.Draw(shader);
+		}
+
+	}
+
+
 
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
