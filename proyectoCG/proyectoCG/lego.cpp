@@ -233,7 +233,7 @@ void animate(void)
 {
 }
 
-void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB)
+void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, Model pirata)
 {
 	shader.use();
 
@@ -305,6 +305,12 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
 	shader.setMat4("model", model);
 	piso.Draw(shader);
+
+	//PIRATA
+	model = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -1.5f, 0.0f));
+	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+	shader.setMat4("model", model);
+	pirata.Draw(shader);
 
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
@@ -380,6 +386,7 @@ int main()
 	//Model llantasModel = ((char *)"Models/Lambo/Wheel.obj");
 	Model pisoModel = ((char *)"Models/piso/piso.obj");
 	Model pisoBlanco = ((char *)"Models/pisoB/piso.obj");
+	Model pirata = ((char *)"Modelos/pirata/pirata.obj");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -417,7 +424,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco);
+		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
