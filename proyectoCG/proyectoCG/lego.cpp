@@ -233,7 +233,7 @@ void animate(void)
 {
 }
 
-void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, Model pirata)
+void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, Model pirata, Model CamionetaSD, Model PlaneSD)
 {
 	shader.use();
 
@@ -336,6 +336,25 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	shader.setMat4("model", model);
 	pirata.Draw(shader);
 
+	//CAMIONETA DEL MISTERIO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
+	CamionetaSD.Draw(shader);
+
+	//AVION SD
+
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
+
+	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
+	PlaneSD.Draw(shader);
+
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
 	skyboxShader.use();
@@ -411,6 +430,8 @@ int main()
 	Model pisoModel = ((char *)"Models/piso/piso.obj");
 	Model pisoBlanco = ((char *)"Models/pisoB/piso.obj");
 	Model pirata = ((char *)"Modelos/pirata/pirata.obj");
+	Model CamionetaSD = ((char *)"Modelos/SD_C/CamionetaSD.fbx");
+	Model PlaneSD = ((char *)"Modelos/SD_P/PlaneSD.fbx");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -448,7 +469,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata);
+		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata, CamionetaSD, PlaneSD);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -484,6 +505,10 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		lightPosition.z -=0.5f;
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		lightPosition.z += 0.5f;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		lightPosition.x += 0.5f;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		lightPosition.x -= 0.5f;
 
 	/* MOVIMIENTO DEL AUTO */
 
