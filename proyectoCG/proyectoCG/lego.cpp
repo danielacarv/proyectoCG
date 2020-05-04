@@ -337,8 +337,8 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	pirata.Draw(shader);
 
 	//CAMIONETA DEL MISTERIO
-	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
@@ -347,7 +347,7 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 
 	//AVION SD
 
-	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
 
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
@@ -355,7 +355,7 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	shader.setMat4("model", model);
 	PlaneSD.Draw(shader);
 
-
+	
 
 	//Castillo SD
 
