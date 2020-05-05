@@ -24,8 +24,8 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 // settings
 // Window size
-int SCR_WIDTH = 3800;
-int SCR_HEIGHT = 7600;
+int SCR_WIDTH = 38000;
+int SCR_HEIGHT = 76000;
 
 GLFWmonitor *monitors;
 GLuint skyboxVBO, skyboxVAO;
@@ -233,7 +233,8 @@ void animate(void)
 {
 }
 
-void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD)
+void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, 
+	Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD, Model CamionLego)
 {
 	shader.use();
 
@@ -329,6 +330,21 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	}
 
 
+	/*PIEZA GRIS Estacionamiento */
+
+	for (float i = 6; i < 9; i++)
+	{
+		for (float j = 0; j < 15; j++)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			shader.setMat4("model", model);
+			piso.Draw(shader);
+		}
+
+	}
+
+
 
 	//PIRATA
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -1.5f, 0.0f));
@@ -366,6 +382,23 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
 	CastilloSD.Draw(shader);
+
+
+
+
+	//Camion Lego
+
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
+
+	
+	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
+	CamionLego.Draw(shader);
+
 
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
@@ -444,7 +477,8 @@ int main()
 	Model pirata = ((char *)"Modelos/pirata/pirata.obj");
 	Model CamionetaSD = ((char *)"Modelos/SD_C/CamionetaSD.fbx");
 	Model PlaneSD = ((char *)"Modelos/SD_P/PlaneSD.fbx");
-	Model CastilloSD = ((char *)"Modelos/Castillo/ultimatecastillo.obj");
+	Model CastilloSD = ((char *)"Modelos/Castillo/ultimatecastillo.fbx");
+	Model CamionLego = ((char *)"Modelos/OtrosModelos/CamionLego.fbx");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -482,7 +516,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata, CamionetaSD, PlaneSD, CastilloSD);
+		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
