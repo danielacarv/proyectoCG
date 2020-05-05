@@ -234,7 +234,8 @@ void animate(void)
 }
 
 void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, 
-	Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD, Model CamionLego)
+	Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD, Model CamionLego, 
+	Model Pizzeria)
 {
 	shader.use();
 
@@ -351,17 +352,17 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 	shader.setMat4("model", model);
 	pirata.Draw(shader);
-
-	//CAMIONETA DEL MISTERIO
+	/* //CAMIONETA DEL MISTERIO
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
-	CamionetaSD.Draw(shader);
+	CamionetaSD.Draw(shader);*/
+	
 
-	//AVION SD
+	/*//AVION SD
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
@@ -369,14 +370,16 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
-	PlaneSD.Draw(shader);
-
+	PlaneSD.Draw(shader);*/
 	
 
+	
+	/**/
 	//Castillo SD
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	tmp = model = glm::translate(model, glm::vec3(-30.0f, 0.0f, 40.0f));
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 50.0f));
 
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
@@ -389,8 +392,8 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	//Camion Lego
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
 
 	
@@ -399,6 +402,17 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	shader.setMat4("model", model);
 	CamionLego.Draw(shader);
 
+	/*
+	//Pizzeria 
+
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-15.0f, 0.0f, 20.0f));
+
+	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
+	Pizzeria.Draw(shader);
+	*/
 
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
@@ -479,6 +493,7 @@ int main()
 	Model PlaneSD = ((char *)"Modelos/SD_P/PlaneSD.fbx");
 	Model CastilloSD = ((char *)"Modelos/Castillo/ultimatecastillo.fbx");
 	Model CamionLego = ((char *)"Modelos/OtrosModelos/CamionLego.fbx");
+	Model Pizzeria = ((char *)"Modelos/OtrosModelos/Lego_Pizza.fbx");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -516,7 +531,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego);
+		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, 
+			pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego, Pizzeria);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
