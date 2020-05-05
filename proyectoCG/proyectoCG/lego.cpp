@@ -2,7 +2,7 @@
 /*--------------------Integrantes: ----------------------------------------*/
 /*------------------ Amezaga Campos Salvador ---------------------------------*/
 /*------------------ Colohua Carvajal Daniela ---------------------------------*/
-/*------------------ Luis David Torres Trejo ---------------------------------*/
+
 
 //#define STB_IMAGE_IMPLEMENTATION
 #include <glew.h>
