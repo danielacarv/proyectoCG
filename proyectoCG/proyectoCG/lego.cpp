@@ -2,6 +2,10 @@
 /*--------------------Integrantes: ----------------------------------------*/
 /*------------------ Amezaga Campos Salvador ---------------------------------*/
 /*------------------ Colohua Carvajal Daniela ---------------------------------*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> f587b42666ddd577e348315fbb7e2840544bb0d9
 
 //#define STB_IMAGE_IMPLEMENTATION
 #include <glew.h>
