@@ -2,7 +2,6 @@
 /*--------------------Integrantes: ----------------------------------------*/
 /*------------------ Amezaga Campos Salvador ---------------------------------*/
 /*------------------ Colohua Carvajal Daniela ---------------------------------*/
-/*------------------ Luis David Torres Trejo ---------------------------------*/
 
 //#define STB_IMAGE_IMPLEMENTATION
 #include <glew.h>
@@ -28,7 +27,7 @@ int SCR_WIDTH = 38000;
 int SCR_HEIGHT = 76000;
 
 GLFWmonitor *monitors;
-GLuint skyboxVBO, skyboxVAO;
+GLuint skyboxVBO, skyboxVAO, VAO, EBO,VBO;
 
 //Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -45,6 +44,7 @@ glm::vec3 lightPosition(0.0f, 4.0f, 3.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 void myData(void);
+void myData2(void);
 void display(Shader, Model, Model);
 void getResolution(void);
 void animate(void);
@@ -127,13 +127,79 @@ void getResolution()
 
 void LoadTextures()
 {
-	
+	t_smile = generateTextures("Textures/ficha.jpg", 0);
 }
 
 void myData()
 {	
-	/* VERTICES PARA EL SKY BOX */
+	
 
+	/* VERTICES DE UN CUBO */
+
+	float vertices[] = {
+
+		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Frontal
+		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
+		0.5f, 0.5f, 0.5f,		1.0f,1.0f,0.0f,	//V5
+		-0.5f, 0.5f, 0.5f,		0.0f,1.0f,0.0f,   //V4
+
+		0.5f, -0.5f, -0.5f,		0.0f,0.0f,0.0f,	//V2 - Trasera
+		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,   //V3
+		-0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V7
+		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
+
+		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Izq
+		-0.5f, 0.5f, -0.5f,		1.0f,0.0f,0.0f,	//V7
+		-0.5f, -0.5f, -0.5f,	1.0f,1.0f,0.0f,	//V3
+		-0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,	//V0
+
+		0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V5 - Der
+		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
+		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
+		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
+
+		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Sup
+		0.5f, 0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V5
+		0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V6
+		-0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,//V7
+
+		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Inf
+		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,	//V3
+		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
+		0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,
+	};
+
+	unsigned int indices[] = {
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+}
+
+void myData2()
+{
 	GLfloat skyboxVertices[] = {
 		// Positions
 		-1.0f,  1.0f, -1.0f,
@@ -179,41 +245,6 @@ void myData()
 		1.0f, -1.0f,  1.0f
 	};
 
-	/* VERTICES DE UN CUBO */
-
-	float vertices[] = {
-
-		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Frontal
-		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
-		0.5f, 0.5f, 0.5f,		1.0f,1.0f,0.0f,	//V5
-		-0.5f, 0.5f, 0.5f,		0.0f,1.0f,0.0f,   //V4
-
-		0.5f, -0.5f, -0.5f,		0.0f,0.0f,0.0f,	//V2 - Trasera
-		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,   //V3
-		-0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V7
-		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
-
-		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Izq
-		-0.5f, 0.5f, -0.5f,		1.0f,0.0f,0.0f,	//V7
-		-0.5f, -0.5f, -0.5f,	1.0f,1.0f,0.0f,	//V3
-		-0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,	//V0
-
-		0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V5 - Der
-		0.5f, -0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V1
-		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
-		0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,	//V6
-
-		-0.5f, 0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V4 - Sup
-		0.5f, 0.5f, 0.5f,		1.0f,0.0f,0.0f,	//V5
-		0.5f, 0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V6
-		-0.5f, 0.5f, -0.5f,		0.0f,1.0f,0.0f,//V7
-
-		-0.5f, -0.5f, 0.5f,		0.0f,0.0f,0.0f,	//V0 - Inf
-		-0.5f, -0.5f, -0.5f,	1.0f,0.0f,0.0f,	//V3
-		0.5f, -0.5f, -0.5f,		1.0f,1.0f,0.0f,	//V2
-		0.5f, -0.5f, 0.5f,		0.0f,1.0f,0.0f,
-	};
-
 	glGenVertexArrays(1, &skyboxVAO);
 	glGenBuffers(1, &skyboxVBO);
 
@@ -235,7 +266,7 @@ void animate(void)
 
 void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model PisoB, 
 	Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD, Model CamionLego, 
-	Model Pizzeria)
+	Model Pizzeria, Model cuboG, Model cuboB, Model cuboC, Model trailer)
 {
 	shader.use();
 
@@ -286,83 +317,120 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	/* DIBUJAMOS EL PISO */
 
 	/* EL MODELO DEL PISO ES UN CUBO (MEDIDAS DEL OBJ (1,1,0.025)[m])*/
+	glBindVertexArray(VAO);
+	float i =0.0f,
+		  j =0.0f;
+	//CARRETERA
 
-	/* PIEZA GRIS */
-
-	for (float i = 0; i < 3; i++)
+	for ( i = 0; i <= 15.5; i=i+1.55f)  //PARTE VERTICAL GRIS 1
 	{
-		for (float j = 0; j < 15; j++)
+		for (j = 0; j < 62; j=j+1.55f)
 		{
-			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f,j));
-			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5,j));
+			//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 			shader.setMat4("model", model);
-			piso.Draw(shader);
+			cuboG.Draw(shader);
 		}
 	}
 
-
-	/* PIEZA BLANCA */
-
-	for (float i = 3; i < 6; i++)
+	for ( i = -1.55f; i >= -31.0f; i = i - 1.55f)  //PARTE HORIZONTAL GRIS 1
 	{
-		for (float j = 0; j < 15; j++)
-		{
-			model = glm::translate(glm::mat4(1.0f), glm::vec3(i,-1.5f,j));
-			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
-			shader.setMat4("model", model);
-			PisoB.Draw(shader);
-		}
-		
-	}
-	
-
-	/* SEGUNDA PIEZA GRIS */
-
-	for (float i = 6; i < 9; i++)
-	{
-		for (float j = 0; j < 15; j++)
-		{
-			model = glm::translate(glm::mat4(1.0f), glm::vec3(i,-1.5f,j));
-			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
-			shader.setMat4("model", model);
-			piso.Draw(shader);
-		}
-
-	}
-
-
-	/*PIEZA GRIS Estacionamiento */
-
-	for (float i = 6; i < 9; i++)
-	{
-		for (float j = 0; j < 15; j++)
+		for (j = -1.55f; j >= -15.5f; j = j - 1.55f)
 		{
 			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
-			//model = glm::scale(model, glm::vec3(5.0f, 1.0f, 15.0f));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 			shader.setMat4("model", model);
-			piso.Draw(shader);
+			cuboG.Draw(shader);
 		}
+	}
 
+	for (i = 15.5f; i <= 17.05f; i = i + 1.55f) //PARTE VERTICAL BLANCO 1
+	{
+		for (j = 0; j < 62; j = j + 1.55f)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+			shader.setMat4("model", model);
+			cuboB.Draw(shader);
+		}
+	}
+
+	for (j = 0; j < 62; j = j + 1.55f) //PARTE GRIS VERTICAL DESPUÉS DE BLANCO
+	{
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(18.6, -1.5f, j));
+		//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		shader.setMat4("model", model);
+		cuboG.Draw(shader);
 	}
 
 
+	for (i = 20.15f; i <= 21.7f; i = i + 1.55f) //PARTE VERTICAL BLANCO 2
+	{
+		for (j = 0; j < 62; j = j + 1.55f)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+			shader.setMat4("model", model);
+			cuboB.Draw(shader);
+		}
+	}
+
+	for (i = 23.25f; i <= 38.75f; i = i + 1.55f) //PARTE VERTICAL GRIS 2
+	{
+		for (j = 0; j < 62; j = j + 1.55f)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+			shader.setMat4("model", model);
+			cuboG.Draw(shader);
+		}
+	}
+
+	for (i = 40.3f; i <= 52.7f; i = i + 1.55f) //PARTE VERTICAL CAFE
+	{
+		for (j = 0; j < 62; j = j + 1.55f)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+			shader.setMat4("model", model);
+			cuboC.Draw(shader);
+		}
+	}
+
+	for (i = 0.0f; i <= 77.5f; i = i + 1.55f) //PARTE HORIZONTAL GRIS ARCO
+	{
+		for (j = 63.55; j <= 79.05; j = j + 1.55f)
+		{
+			model = glm::translate(glm::mat4(1.0f), glm::vec3(i, -1.5f, j));
+			//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+			shader.setMat4("model", model);
+			cuboG.Draw(shader);
+		}
+	}
+
+	model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.5f, 0.0f));
+	model = glm::scale(model, glm::vec3(10.0f, 10.0f,10.0f));
+	shader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, t_smile);
+	shader.setMat4("model", model);
+	glDrawArrays(GL_QUADS,0, 24);
 
 	//PIRATA
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -1.5f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 	shader.setMat4("model", model);
 	pirata.Draw(shader);
-	/* //CAMIONETA DEL MISTERIO
+	
+	//CAMIONETA DEL MISTERIO
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	tmp = model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
-
-	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	tmp = model = glm::translate(model, glm::vec3(3.0f, -1.0f, 5.0f));
+	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
-	CamionetaSD.Draw(shader);*/
+	CamionetaSD.Draw(shader);
 	
 
-	/*//AVION SD
+	//AVION SD
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
@@ -370,7 +438,7 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
-	PlaneSD.Draw(shader);*/
+	PlaneSD.Draw(shader);
 	
 
 	
@@ -387,21 +455,29 @@ void display(Shader shader, Shader skyboxShader, GLuint skybox,Model piso, Model
 	CastilloSD.Draw(shader);
 
 
-
-
 	//Camion Lego
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 10.0f));
-
-	
-	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
 	CamionLego.Draw(shader);
 
+	//TRAILER
+	/*
+	//model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(30.0f, 0.0f, 10.0f));
+	//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
+	trailer.Draw(shader);
+	*/
 	/*
 	//Pizzeria 
 
@@ -472,7 +548,9 @@ int main()
 	//Mis funciones
 	//Datos a utilizar
 	LoadTextures();
+	myData2();
 	myData();
+	
 	glEnable(GL_DEPTH_TEST);
 	
 	//For Models
@@ -494,6 +572,10 @@ int main()
 	Model CastilloSD = ((char *)"Modelos/Castillo/ultimatecastillo.fbx");
 	Model CamionLego = ((char *)"Modelos/OtrosModelos/CamionLego.fbx");
 	Model Pizzeria = ((char *)"Modelos/OtrosModelos/Lego_Pizza.fbx");
+	Model cuboG = ((char *)"Modelos/cuboGris/cuboG.obj");
+	Model cuboB = ((char *)"Modelos/cuboBlanco/cuboB.obj");
+	Model cuboC = ((char *)"Modelos/cuboCafec/cuboCC.obj");
+	Model trailer = ((char *)"Modelos/trailer/trailer.fbx");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -502,8 +584,8 @@ int main()
 	vector<const GLchar*> faces;
 	faces.push_back("SkyBox/right.tga");
 	faces.push_back("SkyBox/left.tga");
-	faces.push_back("SkyBox/top.tga");
 	faces.push_back("SkyBox/bottom.tga");
+	faces.push_back("SkyBox/top.tga");
 	faces.push_back("SkyBox/back.tga");
 	faces.push_back("SkyBox/front.tga");
 
@@ -532,7 +614,7 @@ int main()
 
 		//display(modelShader, ourModel, llantasModel);
 		display(modelShader, SkyBoxshader, cubemapTexture,pisoModel,pisoBlanco, 
-			pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego, Pizzeria);
+			pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego, Pizzeria, cuboG, cuboB, cuboC,trailer);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -544,7 +626,8 @@ int main()
     // ------------------------------------------------------------------
 	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &skyboxVBO);
-
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
     glfwTerminate();
     return 0;
 }
