@@ -31,9 +31,9 @@ GLuint VBO, VAO, EBO;
 GLuint skyboxVBO, skyboxVAO;
 
 //Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 double	lastX = 0.0f,
-lastY = 0.0f;
+lastY = 0.0f;																						//Aqui esta la camara
 bool firstMouse = true;
 
 //Timing
@@ -250,9 +250,9 @@ void animate(void)
 {
 }
 
-void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox, Model pirata, Model CamionetaSD, Model PlaneSD, Model CastilloSD,
-	Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro, Model Casita, Model Carro,
-	Model Casita2)
+void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox, Model pirata, Model CamionetaSD,
+	Model PlaneSD,Model CastilloSD,Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro,
+	Model Casita, Model Carro, Model Casita2, Model Casita3, Model Estudio)
 {
 	shader.use();
 
@@ -585,7 +585,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	PlaneSD.Draw(shader);
 
-	/**/
+	/*
 	//Castillo SD
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -597,6 +597,8 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
 	CastilloSD.Draw(shader);
+	*/
+	
 
 	//FARO
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -606,22 +608,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	faro.Draw(shader);
 
-	/*
-	//Camion Lego
-
-	//model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	//model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-	//model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//tmp = model = glm::translate(model, glm::vec3(-10.0f, -10.0f, 10.0f));
-	tmp = model = glm::translate(model, glm::vec3(0.0f, 15.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(5.4f, 5.4f, 5.4f));
-	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
-	shader.setMat4("model", model);
-	CamionLego.Draw(shader);
-	*/
-
+	
 	//Camion Lego
 
 	//model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -664,7 +651,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	
 	//CASITA
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	tmp = model = glm::translate(model, glm::vec3(15.0f, 5.0f, -65.0f));
+	tmp = model = glm::translate(model, glm::vec3(15.0f, 6.0f, -52.0f));
 	model = glm::scale(model, glm::vec3(30.5f, 30.5f, 30.5f));
 	shader.setMat4("model", model);
 	Casita.Draw(shader);
@@ -677,12 +664,34 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	Carro.Draw(shader);
 
+	/*
 	//Casita 2
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(15.0f, 0.0f, -75.0f));
 	model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
+	Casita2.Draw(shader);*/
+	
+	//Casita 2
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(0.0f, -1.0f, -70.0f));
+	model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setMat4("model", model);
 	Casita2.Draw(shader);
+
+	//Casita 3
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(30.0f, 0.0f, 80.0f));
+	model = glm::scale(model, glm::vec3(2.3f, 2.3f, 2.3f));
+	shader.setMat4("model", model);
+	Casita3.Draw(shader);
+
+	//Estudio
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-70.0f, -2.0f, -15.0f));
+	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+	shader.setMat4("model", model);
+	Estudio.Draw(shader);
 
 
 	// Draw skybox as last
@@ -772,6 +781,8 @@ int main()
 	Model Casita = ((char *)"Modelos/OtrosModelos/casita.obj");
 	Model Carro = ((char *)"Modelos/OtrosModelos/NEWCARRO.obj");
 	Model Casita2 = ((char *)"Modelos/OtrosModelos/casita2.obj");
+	Model Casita3 = ((char *)"Modelos/House.obj");
+	Model Estudio = ((char *)"Modelos/OtrosModelos/Estudio.obj");
 
 
 	/* TEXTURAS DEL SKY BOX*/
@@ -810,8 +821,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader,primitivasShader, cubemapTexture, pirata, CamionetaSD, PlaneSD, CastilloSD, CamionLego,
-			cuboG, cuboB, cuboC, Pizzeria, faro, Casita,Carro, Casita2);
+		display(modelShader, SkyBoxshader,primitivasShader, cubemapTexture, pirata, CamionetaSD, PlaneSD, CastilloSD,CamionLego,
+			cuboG, cuboB, cuboC, Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
