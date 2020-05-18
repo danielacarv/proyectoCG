@@ -15,6 +15,11 @@
 // Other Libs
 #include "SOIL2/SOIL2.h"
 
+//Librerías para sonido
+#include <windows.h>
+#include <iostream>
+#pragma comment(lib,"winmm.lib")
+
 void resize(GLFWwindow* window, int width, int height);
 //void my_input(GLFWwindow *window);
 void my_input(GLFWwindow *window, int key, int scancode, int action, int mode);
@@ -31,14 +36,25 @@ GLuint VBO, VAO, EBO;
 GLuint skyboxVBO, skyboxVAO;
 
 //Camera
-Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));  //Aqui esta la camara
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.5f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+GLfloat cameraSpeed = 0.05f;
+
+
+
+
 double	lastX = 0.0f,
-lastY = 0.0f;																						//Aqui esta la camara
+		lastY = 0.0f;																						
 bool firstMouse = true;
 
 //Timing
 double	deltaTime = 0.0f,
-lastFrame = 0.0f;
+		lastFrame = 0.0f;
 
 //Lighting
 glm::vec3 lightPosition(0.0f, 4.0f, 3.0f);
@@ -53,24 +69,24 @@ unsigned int generateTextures(char*, bool);
 
 //Texture
 
+/* VARIABLES PARA EL MOVIMIENTO DEL AVION */
 
-//For model
-bool animacion = false;
-
-/* VARIABLES PARA EL MOVIMIENTO DEL AUTO */
-
-float	movAuto_z = 0.0f,
-movAuto_y = -1.75f;
+float	movZ = -50.0f,
+		movY = 0.0f,
+		movX = -10.0f,
+		orienta = 0.0f;
 
 /* VARIABLES DE CONTROL */
 
-bool	avanza = false,			// MOVIMIENTO HORIZONTAL
-sube = true,			// MOVIMIENTO VERTICAL
-EA = true,				// ENABLE HORIZONTAL
-ES = false,				// ENABLE VERTICAL
-AV = false;				// ENABLE FINAL (PARA EL ULTIMO DESPLAZAMIENTO)
-
-
+bool	recorrido1 = false,			// MOVIMIENTO HORIZONTAL
+		sube = true,			// MOVIMIENTO DIAGONAL
+		recorrido2 = false,				// 
+		recorrido3 = false,				// 
+		recorrido4 = false,				// 
+		animacion = false,
+		recorrido5 = false,
+		recorrido6 = false,
+		recorrido7 = false;
 
 unsigned int generateTextures(const char* filename, bool alfa)
 {
@@ -248,11 +264,62 @@ void myData2()
 /**/
 void animate(void)
 {
+	if (animacion) {
+		if (sube) {
+			movY += 0.5f;
+			movZ += 0.3f;
+			orienta = 0.0f;
+			if (movY >= 50.0f) {
+				sube = false;
+				recorrido1 = true;
+			}
+		}
+		if (recorrido1) {
+			movX -= 0.3f;
+			orienta = -90.0f;
+			if (movX <= -15.0f) {
+				recorrido1 = false;
+				recorrido2 = true;
+			}
+		}
+		if (recorrido2) {
+			movZ -= 0.4f;
+			orienta = -180.0f;
+			printf("Posicion en z: %f \n", movZ);
+			if (movZ <= -90.0f) {
+				recorrido2 = false;
+				recorrido3 = true;
+			}
+		}
+
+		if (recorrido3) {
+			movX += 0.5f;
+			orienta = -180.0f;
+			if (movX >= 0.0f) {
+				recorrido3 = false;
+				recorrido4 = true;
+			}
+		}
+		if (recorrido4) {
+			movY += 0.5f;
+			movZ += 0.3f;
+			orienta = -100.0f;
+			if (movY <= 0.0f) {
+				recorrido4 = false;
+				recorrido5 = true;
+			}
+		}
+		if (recorrido5) {
+			animacion = false;
+			sube = true;
+		}
+
+	}
 }
 
 void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox, Model pirata, Model CamionetaSD,
-	Model PlaneSD,Model CastilloSD,Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro,
-	Model Casita, Model Carro, Model Casita2, Model Casita3, Model Estudio)
+	Model PlaneSD,/* Model CastilloSD,*/Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro,
+	Model Casita, Model Carro, Model Casita2, Model Casita3, Model Estudio, Model Pandilla)
 {
 	shader.use();
 
@@ -291,7 +358,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	glm::mat4 projection = glm::mat4(1.0f);	//This matrix is for Projection
 
 	//Use "projection" to include Camera
-	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200.0f);
 	view = camera.GetViewMatrix();
 
 	// pass them to the shaders
@@ -302,12 +369,11 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 
 	/* DIBUJAMOS EL PISO */
 
-	/* EL MODELO DEL PISO ES UN CUBO (MEDIDAS DEL OBJ (1,1,0.025)[m])*/
-
 	float i = 0.0f,
 		j = 0.0f;
-	//CARRETERA
 
+	//CARRETERA
+	/*
 	for (i = 0; i <= 15.5; i = i + 1.55f)  //PARTE VERTICAL GRIS 1
 	{
 		for (j = 0; j < 62; j = j + 1.55f)
@@ -560,7 +626,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 			shader.setMat4("model", model);
 			cuboC.Draw(shader);
 		}
-	}
+	}*/
 
 	//PIRATA
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -1.0f, 0.0f));
@@ -579,15 +645,16 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	//AVION SD
 
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -50.0f));
+	model = glm::translate(model, glm::vec3(movX, movY, movZ));
+	model = glm::rotate(model, glm::radians(orienta), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
 	//model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	shader.setMat4("model", model);
 	PlaneSD.Draw(shader);
 
-	/*
+	
 	//Castillo SD
-
+	/*
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(30.0f, -4.0f, -70.0f));
@@ -686,6 +753,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	Casita3.Draw(shader);
 
+
 	//Estudio
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(-70.0f, -2.0f, -15.0f));
@@ -693,6 +761,47 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	Estudio.Draw(shader);
 
+	/*//Zombies
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(20.0f, -1.0f, -30.0f));
+	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
+	shader.setMat4("model", model);
+	Zombies.Draw(shader);
+	*/
+
+	/*//Pandilla de SD Sin Con Alopecia
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(20.0f, -1.0f, -60.0f));
+	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
+	shader.setMat4("model", model);
+	Pandilla.Draw(shader);*/
+/*
+	//Dudes Marineros
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-20.0f, -1.5f, -40.0f));
+	model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+	shader.setMat4("model", model);
+	Dudes.Draw(shader);
+
+	//Bandido
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-35.0f, -1.0f, -65.0f));
+	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
+	shader.setMat4("model", model);
+	Bandido.Draw(shader);
+	//Bandido 2
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-20.0f, -1.0f, -65.0f));
+	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
+	shader.setMat4("model", model);
+	Bandido.Draw(shader);
+	//Bandido 3
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(-10.0f, -1.0f, -65.0f));
+	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
+	shader.setMat4("model", model);
+	Bandido.Draw(shader);
+	*/
 
 	// Draw skybox as last
 	glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
@@ -712,7 +821,7 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	glDepthFunc(GL_LESS); // Set depth function back to default
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 	// glfw: initialize and configure
 	// ------------------------------
@@ -783,7 +892,10 @@ int main()
 	Model Casita2 = ((char *)"Modelos/OtrosModelos/casita2.obj");
 	Model Casita3 = ((char *)"Modelos/House.obj");
 	Model Estudio = ((char *)"Modelos/OtrosModelos/Estudio.obj");
-
+	Model Zombies = ((char *)"Modelos/OtrosModelos/LegoZombies.obj");
+	Model Pandilla = ((char *)"Modelos/OtrosModelos/Pandilla.obj");
+	Model Dudes = ((char *)"Modelos/OtrosModelos/LEGODUDES.obj");
+	Model Bandido = ((char *)"Modelos/OtrosModelos/Bandido.obj");
 
 	/* TEXTURAS DEL SKY BOX*/
 
@@ -803,6 +915,10 @@ int main()
 	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	// render loop
 	// While the windows is not closed
+
+	
+	PlaySound("LSD.mp3",NULL,SND_ASYNC);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -821,14 +937,15 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader,primitivasShader, cubemapTexture, pirata, CamionetaSD, PlaneSD, CastilloSD,CamionLego,
-			cuboG, cuboB, cuboC, Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio);
+		display(modelShader, SkyBoxshader, primitivasShader, cubemapTexture, pirata, CamionetaSD, PlaneSD, /*CastilloSD,*/ CamionLego,
+			cuboG, cuboB, cuboC, Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio, Pandilla);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
@@ -864,10 +981,22 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		lightPosition.x -= 0.5f;
 
-	/* MOVIMIENTO DEL AUTO */
+	if (key == GLFW_KEY_T)
+		cameraPos += cameraSpeed * cameraFront;
+	if (key == GLFW_KEY_G)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (key == GLFW_KEY_T)
+		cameraPos += cameraSpeed * cameraFront;
+	if (key == GLFW_KEY_F)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
+	if (key == GLFW_KEY_H)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
+
+	/* MOVIMIENTO DEL AVION */
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		animacion = true;
+		animacion ^= true;
+
 }
 
 
