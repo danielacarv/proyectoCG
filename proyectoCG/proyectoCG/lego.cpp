@@ -305,7 +305,7 @@ void animate(void)
 }
 
 
-void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox, Model pirata, Model CamionetaSD,
+void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox,/* GLuint skybox2,*/ Model pirata, Model CamionetaSD,
 	Model PlaneSD, Model CastilloSD, Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro,
 	Model Casita, Model Carro, Model Casita2, Model Casita3, Model Estudio, Model Pandilla
 	, Model Zombies, Model Dudes/*, Model Bandido*/)
@@ -929,9 +929,17 @@ int main()
 	faces.push_back("SkyBox/bottom.tga");
 	faces.push_back("SkyBox/back.tga");
 	faces.push_back("SkyBox/front.tga");
-
+	/*
+	faces.push_back("SkyBox/negx.jpg");
+	faces.push_back("SkyBox/posx.jpg");
+	faces.push_back("SkyBox/posy.jpg");
+	faces.push_back("SkyBox/negy.jpg");
+	faces.push_back("SkyBox/negz.jpg");
+	faces.push_back("SkyBox/posz.jpg");
+	*/
 
 	GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);
+	//GLuint cubemapTexture2 = TextureLoading::LoadCubemap(faces);
 
 	glm::mat4 projection = glm::mat4(1.0f);	//This matrix is for Projection
 	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -955,7 +963,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, primitivasShader, cubemapTexture, pirata,
+		display(modelShader, SkyBoxshader, primitivasShader, cubemapTexture/*, cubemapTexture2*/, pirata,
 			CamionetaSD, PlaneSD, CastilloSD, CamionLego, cuboG, cuboB, cuboC,
 			Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio, Pandilla, Zombies, Dudes/*, Bandido*/);
 
@@ -999,6 +1007,31 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		lightPosition.x += 0.5f;
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		lightPosition.x -= 0.5f;
+
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+	{
+
+		vector<const GLchar*> faces;
+		faces.push_back("SkyBox/negx.jpg");
+		faces.push_back("SkyBox/posx.jpg");
+		faces.push_back("SkyBox/posy.jpg");
+		faces.push_back("SkyBox/negy.jpg");
+		faces.push_back("SkyBox/negz.jpg");
+		faces.push_back("SkyBox/posz.jpg");
+		
+		GLuint cubemapTexture2 = TextureLoading::LoadCubemap(faces);}
+	
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+	{
+		vector<const GLchar*> faces;
+		faces.push_back("SkyBox/right.tga");
+		faces.push_back("SkyBox/left.tga");
+		faces.push_back("SkyBox/top.tga");
+		faces.push_back("SkyBox/bottom.tga");
+		faces.push_back("SkyBox/back.tga");
+		faces.push_back("SkyBox/front.tga");
+		GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);
+	}
 
 	/* MOVIMIENTO DEL AVION */
 
