@@ -57,7 +57,31 @@ unsigned int generateTextures(char*, bool);
 float	movZ = -50.0f,
 movY = 0.0f,
 movX = -10.0f,
-orienta = 0.0f;
+orienta = 0.0,
+luz = 0.0032,
+brazoi = 0.0f,
+brazod = 0.0f,
+cabeza = 0.0f,
+pied = 0.0f,
+piei = 0.0f,
+movXt = 0.0f,
+movZt = 0.0f,
+movYt = -1.75f,
+movXbi = 0.0f,
+movZbi = 0.0f,
+movYbi = -1.75f,
+movXpi = 0.0f,
+movZpi = 0.0f,
+movYpi = -1.75f,
+movXpd = 0.0f,
+movZpd = 0.0f,
+movYpd = -1.75f,
+movXbd = 0.0f,
+movZbd = 0.0f,
+movYbd = -1.75f,
+movXc = 0.0f,
+movZc = 0.0f,
+movYc = -1.75f;
 
 /* VARIABLES DE CONTROL */
 
@@ -69,11 +93,17 @@ recorrido4 = false,				//
 animacion = false,
 recorrido5 = false,
 recorrido6 = false,
-recorrido7 = false;
-
-
-
-
+recorrido7 = false,
+animacion2 = false,
+animacion3 = false,
+recorridop1 = true,
+recorridop2 = false,
+recorridop3 = false,
+recorridop4 = false,
+recorridop5 = false,
+recorridop6 = false,
+recorridop7 = false,
+recorridop8 = false;
 
 unsigned int generateTextures(const char* filename, bool alfa)
 {
@@ -302,13 +332,93 @@ void animate(void)
 		}
 
 	}
+
+	//Animacion luz
+	if (animacion2) {
+		luz += 0.001;
+		if (luz >= 0.0102) {
+			animacion2 = false;
+		}
+	}
+
+	//ANIMACION PERSONAJE
+	if (animacion3) {
+		if (recorridop1) {
+			movXt -= 0.2;
+			if (movXt <= -5.0f) {
+				movZt += 0.2f;
+				if (movZt >= 20.0f) {
+					recorridop1 = false;
+					recorridop2 = true;
+				}
+			}
+
+		}
+		if (recorridop2) {
+			movXbi -= 0.2;
+			if (movXbi <= -5.0f) {
+				movZbi += 0.2f;
+				if (movZbi >= 20.0f) {
+					recorridop2 = false;
+					recorridop3 = true;
+				}
+			}
+
+		}
+		if (recorridop3) {
+			movXbd -= 0.2;
+			if (movXbd <= -5.0f) {
+				movZbd += 0.2f;
+				if (movZbd >= 20.0f) {
+					recorridop3 = false;
+					recorridop4 = true;
+				}
+			}
+
+		}
+		if (recorridop4) {
+			movXpi -= 0.2;
+			if (movXpi <= -5.0f) {
+				movZpi += 0.2f;
+				if (movZpi >= 20.0f) {
+					recorridop4 = false;
+					recorridop5 = true;
+				}
+			}
+
+		}
+
+		if (recorridop5) {
+			movXpd -= 0.2;
+			if (movXpd <= -5.0f) {
+				movZpd += 0.2f;
+				if (movZpd >= 20.0f) {
+					recorridop5 = false;
+					recorridop6 = true;
+				}
+			}
+
+		}
+		if (recorridop6) {
+			movXc -= 0.2;
+			if (movXc <= -5.0f) {
+				movZc += 0.2f;
+				if (movZc >= 20.0f) {
+					recorridop6 = false;
+					animacion = false;
+				}
+			}
+
+		}
+
+	}
 }
 
 
-void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox,/* GLuint skybox2,*/ Model pirata, Model CamionetaSD,
+void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint skybox, Model pirata, Model CamionetaSD,
 	Model PlaneSD, Model CastilloSD, Model CamionLego, Model cuboG, Model cuboB, Model cuboC, Model Pizzeria, Model faro,
 	Model Casita, Model Carro, Model Casita2, Model Casita3, Model Estudio, Model Pandilla
-	, Model Zombies, Model Dudes/*, Model Bandido*/)
+	, Model Zombies, Model Dudes/*, Model Bandido*/ ,Model brazoder, Model brazoizq, Model cabeza, Model torzo, Model piernaizq, Model piernader)
 {
 	shader.use();
 
@@ -779,6 +889,49 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 	shader.setMat4("model", model);
 	Dudes.Draw(shader);
+
+	//TORSO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXt, movYt, movZt));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	torzo.Draw(shader);
+
+	//BRAZO DERECHO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 5.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXbd, movYbd, movZbd));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	brazoder.Draw(shader);
+
+	//BRAZO IZQUIERDO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXbi, movYbi, movZbi));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	brazoizq.Draw(shader);
+
+	//PIE IZQUIERDO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXpi, movYpi, movZpi));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	piernaizq.Draw(shader);
+
+	//PIE DERECHO
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXpd, movYpd, movZpd));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	piernader.Draw(shader);
+
+	//CABEZA
+	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	tmp = model = glm::translate(model, glm::vec3(movXc, movYc, movZc));
+	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setMat4("model", model);
+	cabeza.Draw(shader);
+
 	/*
 	
 
@@ -904,6 +1057,12 @@ int main()
 	Model Pandilla = ((char *)"Modelos/PERSONASLEGO/Pandilla.obj");
 	Model Zombies = ((char *)"Modelos/PERSONASLEGO/LegoZombies.obj");
 	Model Dudes = ((char *)"Modelos/PERSONASLEGO/LEGODUDES.fbx");
+	Model brazoder = ((char *)"Modelos/LEGOMAN/BRAZODER.obj");
+	Model brazoizq = ((char *)"Modelos/LEGOMAN/BRAZOIZQ.obj");
+	Model torzo = ((char *)"Modelos/LEGOMAN/TORZO.obj");
+	Model piernader = ((char *)"Modelos/LEGOMAN/PIERNADER.obj");
+	Model piernaizq = ((char *)"Modelos/LEGOMAN/PIERNAIZQ.obj");
+	Model cabeza = ((char *)"Modelos/LEGOMAN/CABEZA.obj");
 	/*
 
 	
@@ -963,9 +1122,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//display(modelShader, ourModel, llantasModel);
-		display(modelShader, SkyBoxshader, primitivasShader, cubemapTexture/*, cubemapTexture2*/, pirata,
+		display(modelShader, SkyBoxshader, primitivasShader, cubemapTexture, pirata,
 			CamionetaSD, PlaneSD, CastilloSD, CamionLego, cuboG, cuboB, cuboC,
-			Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio, Pandilla, Zombies, Dudes/*, Bandido*/);
+			Pizzeria, faro, Casita, Carro, Casita2, Casita3, Estudio, Pandilla, Zombies, Dudes/*, Bandido*/ ,cabeza, torzo, piernader,
+			piernaizq, brazoder, brazoizq);
 
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -1012,14 +1172,14 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	{
 
 		vector<const GLchar*> faces;
-		faces.push_back("SkyBox/negx.jpg");
-		faces.push_back("SkyBox/posx.jpg");
-		faces.push_back("SkyBox/posy.jpg");
-		faces.push_back("SkyBox/negy.jpg");
-		faces.push_back("SkyBox/negz.jpg");
-		faces.push_back("SkyBox/posz.jpg");
+		faces.push_back("SkyBox/grimmnight_rt.tga");
+		faces.push_back("SkyBox/grimmnight_lf.tga");
+		faces.push_back("SkyBox/grimmnight_up.tga");
+		faces.push_back("SkyBox/grimmnight_dn.tga");
+		faces.push_back("SkyBox/grimmnight_bk.tga");
+		faces.push_back("SkyBox/grimmnight_ft.tga");
 		
-		GLuint cubemapTexture2 = TextureLoading::LoadCubemap(faces);}
+		GLuint cubemapTexture = TextureLoading::LoadCubemap(faces);}
 	
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 	{
