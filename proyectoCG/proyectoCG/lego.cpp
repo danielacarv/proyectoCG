@@ -11,6 +11,9 @@
 #include "camera.h"
 #include "Model.h"
 #include "Texture.h"
+#include <windows.h>
+#include <iostream>
+#pragma comment(lib,"winmm.lib")
 
 // Other Libs
 #include "SOIL2/SOIL2.h"
@@ -1106,6 +1109,8 @@ int main()
 	// While the windows is not closed
 	while (!glfwWindowShouldClose(window))
 	{
+		PlaySound("file1.wav", NULL, SND_ASYNC);
+
 		// per-frame time logic
 		// --------------------
 		double currentFrame = glfwGetTime();
@@ -1167,8 +1172,16 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		lightPosition.x += 0.5f;
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		lightPosition.x -= 0.5f;
-
+	/* LUZ*/
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		animacion2 ^= true;
+
+	/* PERSONAJE*/
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+		animacion3 ^= true;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 	{
 
 		vector<const GLchar*> faces;
