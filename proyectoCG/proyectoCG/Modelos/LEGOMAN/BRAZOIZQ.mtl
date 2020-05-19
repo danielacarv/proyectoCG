@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:\\Users\\inthe\\Desktop\\CG_LAB\\CG_LAB\\Modelos\\OtrosModelos\\AZULESTUDIO.jpg
+map_Kd AZULESTUDIO.jpg
 
 newmtl lego_yellow
 Ns 225.000000
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:\\Users\\inthe\\Desktop\\CG_LAB\\CG_LAB\\Modelos\\OtrosModelos\\COLORCAMIONETAYELLOW.jpg
+map_Kd COLORCAMIONETAYELLOW.jpg
 
 newmtl material
 Ns 225.000000
@@ -32,4 +32,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:\\Users\\inthe\\Desktop\\CG_LAB\\CG_LAB\\Modelos\\OtrosModelos\\COLORCAMIONETARED.jpg
+map_Kd COLORCAMIONETARED.jpg
