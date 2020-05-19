@@ -893,6 +893,8 @@ void display(Shader shader, Shader skyboxShader, Shader primitivasShader, GLuint
 	shader.setMat4("model", model);
 	Dudes.Draw(shader);
 
+	//PERSONAJE DESARMADO
+
 	//TORSO
 	model = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	tmp = model = glm::translate(model, glm::vec3(movXt, movYt, movZt));
