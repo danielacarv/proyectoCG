@@ -1174,11 +1174,11 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		lightPosition.x -= 0.5f;
 	/* LUZ*/
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		animacion2 ^= true;
+		animacion2 = true;
 
 	/* PERSONAJE*/
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		animacion3 ^= true;
+		animacion3 = true;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
