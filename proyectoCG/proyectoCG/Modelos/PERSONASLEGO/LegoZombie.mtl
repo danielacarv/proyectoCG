@@ -1,0 +1,14 @@
+# Blender MTL File: 'bandido.blend'
+# Material Count: 1
+
+newmtl Lego_032Texture
+Ns 127.999985
+Ka 1.000000 1.000000 1.000000
+Kd 0.784314 0.784314 0.784314
+Ks 0.060000 0.060000 0.060000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Zombie.jpg
+map_Ks C:\\Minifigure\\Textures\\Bandit_Specular_Map.png
